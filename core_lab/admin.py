@@ -1,15 +1,18 @@
+# ==========================================================
+#  core_lab/admin.py - VERSIÓN FINAL Y CORRECTA
+# ==========================================================
 from django.contrib import admin
 from .models import Material, Ensayo, Simulacion
 
-@admin.register(Material)
 class MaterialAdmin(admin.ModelAdmin):
-    list_display = ['nombre', 'descripcion']
+    # Le decimos que muestre el 'nombre' y la nueva 'categoria' en la lista
+    list_display = ('nombre', 'categoria')
+    # Añadimos un filtro útil por categoría
+    list_filter = ('categoria',)
+    # Añadimos una barra de búsqueda por nombre
+    search_fields = ('nombre',)
 
-@admin.register(Ensayo)
-class EnsayoAdmin(admin.ModelAdmin):
-    list_display = ['id', 'tipo', 'descripcion']
-
-@admin.register(Simulacion)
-class SimulacionAdmin(admin.ModelAdmin):
-    list_display = ['id', 'material', 'ensayo', 'fecha_creacion']
-    readonly_fields = ['fecha_creacion']
+# Registramos todos los modelos para que aparezcan en el Admin
+admin.site.register(Material, MaterialAdmin)
+admin.site.register(Ensayo)
+admin.site.register(Simulacion)

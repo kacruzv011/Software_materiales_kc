@@ -27,20 +27,59 @@ def simulacion(request):
 
 def materiales(request):
     """
-    Esta vista consulta TODOS los materiales de la base de datos,
-    los ordena por nombre y los pasa a la plantilla 'materiales.html'
-    para ser mostrados.
+    Crea una lista estructurada con información técnica detallada para cada categoría
+    de material y la pasa a la plantilla para su visualización interactiva.
     """
-    # 1. Obtenemos todos los objetos del modelo Material, ordenados por nombre.
-    lista_de_materiales = Material.objects.all().order_by('nombre')
-    
-    # 2. Los ponemos en un diccionario de "contexto". 
-    # La clave 'materiales' es el nombre que usaremos en el HTML.
-    context = {
-        'materiales': lista_de_materiales
+    # Diccionario enriquecido con información técnica y propiedades físicas clave
+    descripciones = {
+        'metales': {
+            'tagline': "Materiales caracterizados por su enlace metálico, que resulta en una alta conductividad eléctrica y térmica, ductilidad y brillo.",
+            'properties': [
+                "<strong>Estructura Cristalina y Ductilidad:</strong> Los átomos se ordenan en redes cristalinas (BCC, FCC, HCP) que permiten el deslizamiento de planos atómicos a través del movimiento de dislocaciones. Este mecanismo es la base de su capacidad para deformarse plásticamente (ductilidad) sin fracturarse.",
+                "<strong>Conductividad Térmica y Eléctrica:</strong> La 'nube' o 'mar' de electrones deslocalizados del enlace metálico tiene una alta movilidad, permitiendo la transferencia eficiente tanto de carga eléctrica (corriente) como de energía térmica (vibraciones de la red o fonones).",
+                "<strong>Rigidez (Módulo de Young):</strong> La fuerte atracción electrostática entre los núcleos iónicos y la nube de electrones confiere a los metales una alta resistencia a la deformación elástica, resultando en un Módulo de Young elevado.",
+            ]
+        },
+        'polimericos': {
+            'tagline': "Macromoléculas formadas por la repetición de monómeros. Sus propiedades dependen de la longitud de las cadenas, su entrelazamiento y las fuerzas intermoleculares.",
+            'properties': [
+                "<strong>Baja Conductividad:</strong> Los electrones están confinados en enlaces covalentes, impidiendo su libre movimiento. Esto los convierte en excelentes aislantes eléctricos y térmicos.",
+                "<strong>Viscoelasticidad:</strong> Exhiben un comportamiento mecánico intermedio entre un sólido elástico y un fluido viscoso. Bajo carga, las cadenas poliméricas se desenredan y alinean, un proceso dependiente del tiempo y la temperatura que da lugar a fenómenos como la fluencia (creep) y la relajación de tensiones.",
+                "<strong>Estructura Molecular (Termoplásticos vs. Termoestables):</strong> Los termoplásticos consisten en cadenas lineales o ramificadas unidas por débiles fuerzas de Van der Waals, permitiendo su reblandecimiento y moldeo con calor. Los termoestables poseen una red tridimensional de enlaces cruzados (cross-linking) que les confiere mayor rigidez y estabilidad térmica, pero no pueden ser reprocesados.",
+            ]
+        },
+        'ceramicos': {
+            'tagline': "Compuestos inorgánicos, no metálicos, con enlaces iónicos y/o covalentes fuertes que les confieren alta dureza y resistencia a la compresión y a altas temperaturas.",
+            'properties': [
+                "<strong>Fragilidad (Baja Tenacidad a la Fractura):</strong> La rigidez de los enlaces iónicos/covalentes y la compleja estructura cristalina impiden el movimiento de dislocaciones. La concentración de esfuerzos en la punta de una grieta no puede ser disipada por deformación plástica, lo que lleva a una propagación catastrófica de la fractura con mínima absorción de energía.",
+                "<strong>Alta Dureza y Resistencia a la Compresión:</strong> La enorme energía requerida para romper los fuertes enlaces primarios hace que los cerámicos sean extremadamente resistentes a la indentación (dureza) y a las fuerzas de compresión.",
+                "<strong>Estabilidad Química y Térmica (Refractarios):</strong> Al ser a menudo óxidos, nitruros o carburos, ya se encuentran en un estado de baja energía, lo que les confiere una excelente resistencia a la corrosión química y a la degradación a temperaturas elevadas (comportamiento refractario).",
+            ]
+        },
+        'compuestos': {
+            'tagline': "Materiales multifásicos diseñados para combinar las mejores características de sus constituyentes, logrando propiedades que no son alcanzables por ninguno de los componentes por sí solo.",
+            'properties': [
+                "<strong>Anisotropía:</strong> Sus propiedades mecánicas son altamente direccionales y dependen de la orientación de la fase de refuerzo (e.g., fibras). Son significativamente más resistentes y rígidos en la dirección de las fibras que en la dirección transversal.",
+                "<strong>Principio de Acción Combinada:</strong> Se basan en una fase matriz (generalmente polimérica o metálica) que cohesiona y protege a una fase de refuerzo (fibras de carbono, vidrio, etc.) que aporta la rigidez y resistencia. La 'Ley de las Mezclas' es un modelo de primer orden para predecir propiedades como el módulo elástico.",
+                "<strong>Alta Relación Resistencia-Peso:</strong> Al combinar fibras ligeras y extremadamente resistentes (como el carbono) con una matriz de baja densidad, se obtienen materiales con una rigidez y resistencia comparables o superiores a las de los metales, pero con una fracción de su peso. Esto es crucial en la industria aeroespacial y automotriz.",
+            ]
+        }
     }
     
-    # 3. Renderizamos la plantilla, pasándole el contexto.
+    # El resto de la lógica no necesita cambios
+    datos_categorias = []
+    for valor, nombre in Material.Categoria.choices:
+        datos_categorias.append({
+            'valor': valor,
+            'nombre': nombre,
+            'descripcion': descripciones.get(valor),
+            'materiales': Material.objects.filter(categoria=valor).order_by('nombre')
+        })
+
+    context = {
+        'datos_categorias': datos_categorias
+    }
+    
     return render(request, 'core_lab/materiales.html', context)
 def home(request):
     materiales = Material.objects.all().order_by('nombre')
