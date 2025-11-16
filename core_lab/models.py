@@ -7,6 +7,11 @@ class Material(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    @property
+    def nombre_display(self):
+        """Devuelve el nombre con guiones bajos reemplazados por espacios."""
+        return self.nombre.replace('_', ' ')
 
 
 class Ensayo(models.Model):

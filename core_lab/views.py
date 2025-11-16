@@ -20,9 +20,28 @@ def simulacion(request):
     ensayos = Ensayo.objects.all().order_by('tipo')
     return render(request, 'core_lab/simulacion.html', {'materiales': materiales, 'ensayos': ensayos})
 
-def materiales(request):
-    return render(request, 'core_lab/materiales.html')
+# ==========================================================
+#  core_lab/views.py - FUNCIÓN MATERIALES ACTUALIZADA
+# ==========================================================
 
+
+def materiales(request):
+    """
+    Esta vista consulta TODOS los materiales de la base de datos,
+    los ordena por nombre y los pasa a la plantilla 'materiales.html'
+    para ser mostrados.
+    """
+    # 1. Obtenemos todos los objetos del modelo Material, ordenados por nombre.
+    lista_de_materiales = Material.objects.all().order_by('nombre')
+    
+    # 2. Los ponemos en un diccionario de "contexto". 
+    # La clave 'materiales' es el nombre que usaremos en el HTML.
+    context = {
+        'materiales': lista_de_materiales
+    }
+    
+    # 3. Renderizamos la plantilla, pasándole el contexto.
+    return render(request, 'core_lab/materiales.html', context)
 def home(request):
     materiales = Material.objects.all().order_by('nombre')
     ensayos = Ensayo.objects.all().order_by('tipo')
@@ -50,16 +69,32 @@ def plot_png(request):
         resp['Content-Disposition'] = 'attachment; filename="corelab_plot_placeholder.png"'
     return resp
 
-def download_csv(request):
-    # ¡Y ESTA TAMBIÉN!
-    headers = ['tiempo', 'deformacion', 'esfuerzo']
-    buf = io.StringIO()
-    writer = csv.writer(buf)
-    writer.writerow(headers)
-    resp = HttpResponse(buf.getvalue(), content_type='text/csv')
-    resp['Content-Disposition'] = 'attachment; filename="corelab_data_placeholder.csv"'
-    return resp
+def download_material_data(request, material_name):
+    """
+    Busca el archivo de datos para un material específico (asumiendo ensayo de 'tensión'
+    por defecto) y lo devuelve como una descarga CSV.
+    """
+    # Asumimos que queremos los datos del ensayo más común: "tensión"
+    tipo_ensayo = 'tension'
+    nombre_archivo = f"{material_name}_{tipo_ensayo}.csv"
+    ruta_archivo = os.path.join(settings.BASE_DIR, 'materials', 'data', nombre_archivo)
 
+    try:
+        # Abrimos el archivo en modo binario ('rb') para leer su contenido crudo
+        with open(ruta_archivo, 'rb') as f:
+            csv_data = f.read()
+
+        # Creamos una respuesta HTTP con el contenido del archivo
+        response = HttpResponse(csv_data, content_type='text/csv')
+        
+        # Le decimos al navegador que es un archivo adjunto para descargar
+        response['Content-Disposition'] = f'attachment; filename="datos_{nombre_archivo}"'
+        
+        return response
+
+    except FileNotFoundError:
+        # Si el archivo no existe, devolvemos un error 404 claro
+        return HttpResponseNotFound(f"No se encontró el archivo de datos para '{material_name}' con ensayo de 'tensión'.")
 # ============================================================
 #  API PARA OBTENER DATOS (VERSIÓN ROBUSTA)
 # ============================================================

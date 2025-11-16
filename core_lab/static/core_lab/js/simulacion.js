@@ -1,5 +1,5 @@
 // ==========================================================
-//  SIMULACION.JS - VERSIÓN FINAL Y FUNCIONAL
+//  SIMULACION.JS - VERSIÓN FINAL Y CORREGIDA
 // ==========================================================
 document.addEventListener("DOMContentLoaded", () => {
   // Variable global para mantener la instancia del gráfico
@@ -16,11 +16,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para crear o actualizar el gráfico
   function crearGrafico(labels = [], data = [], xLabel = "Deformación (%)", yLabel = "Esfuerzo (Pa)") {
-    // Si ya existe un gráfico, lo destruimos antes de crear uno nuevo
     if (chartInstance) {
       chartInstance.destroy();
     }
-    
     chartInstance = new Chart(ctx, {
       type: "line",
       data: {
@@ -50,7 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para reiniciar la simulación
   function reiniciarSimulacion() {
-    crearGrafico(); // Llamamos a crearGrafico sin datos para mostrarlo vacío
+    crearGrafico();
     tablaDatos.innerHTML = `<tr><td colspan="3">Selecciona material y ensayo</td></tr>`;
   }
 
@@ -58,7 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Función para cargar los datos desde la API de Django
   async function cargarDatos(materialNombre, tipoEnsayo) {
-    const url = `/obtener_datos?material=${encodeURIComponent(materialNombre)}&tipo_ensayo=${encodeURIComponent(tipoEnsayo)}`;
+    //
+    // ▼▼▼ ¡ESTA ES LA LÍNEA QUE HEMOS CORREGIDO! ▼▼▼
+    // Ahora usa la variable OBTENER_DATOS_URL que nos proporciona Django
+    const url = `${OBTENER_DATOS_URL}?material=${encodeURIComponent(materialNombre)}&tipo_ensayo=${encodeURIComponent(tipoEnsayo)}`;
+    // ▲▲▲ ¡LÍNEA CORREGIDA! ▲▲▲
+    //
     try {
       const response = await fetch(url);
       const data = await response.json();
@@ -67,11 +70,9 @@ document.addEventListener("DOMContentLoaded", () => {
         throw new Error(data.error);
       }
 
-      // Extraer datos para el gráfico
       const labels = data.datos_grafica.map(d => d.x);
       const values = data.datos_grafica.map(d => d.y);
 
-      // Llenar la tabla de datos
       const filas = data.datos_tabla.map(fila => `
         <tr>
           <td>${parseFloat(fila.tiempo).toFixed(2)}</td>
@@ -81,13 +82,12 @@ document.addEventListener("DOMContentLoaded", () => {
       
       tablaDatos.innerHTML = filas;
       
-      // Actualizar el gráfico con los nuevos datos y etiquetas de ejes
       crearGrafico(labels, values, data.eje_x_label, data.eje_y_label);
 
     } catch (err) {
       console.error("❌ Error al obtener datos:", err);
       tablaDatos.innerHTML = `<tr><td colspan="3">Error: ${err.message}</td></tr>`;
-      reiniciarSimulacion(); // Limpiamos la gráfica si hay un error
+      reiniciarSimulacion();
     }
   }
 

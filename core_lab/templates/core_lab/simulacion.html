@@ -1,24 +1,24 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block content %}
-<link rel="stylesheet" href="{% static 'core_lab/css/simulacion.css' %}">
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-<script src="{% static 'core_lab/js/simulacion.js' %}" defer></script>
+{% block title %}CoreLab - Simulación de Ensayos{% endblock %}
 
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'core_lab/css/simulacion.css' %}">
+{% endblock %}
+
+{% block content %}
 <div class="simulacion-container">
   <h1>Máquina Universal de Ensayos</h1>
 
-  <!-- 🔽 Menús de selección -->
   <div class="modo-selector">
     <label for="material">Selecciona el material:</label>
     <select id="material">
       <option value="" disabled selected>-- Selecciona un material --</option>
       {% for mat in materiales %}
-        <option value="{{ mat.nombre }}">{{ mat.nombre }}</option>
+        <option value="{{ mat.nombre }}">{{ mat.nombre_display }}</option>
       {% endfor %}
     </select>
-
     <label for="tipo-ensayo">Selecciona el tipo de ensayo:</label>
     <select id="tipo-ensayo">
       <option value="" disabled selected>-- Selecciona un tipo de ensayo --</option>
@@ -28,29 +28,23 @@
     </select>
   </div>
 
-  <!-- 🔧 Contenedor principal de simulación -->
   <div class="machine-graph-container">
     <div class="machine-section">
       <div class="machine-wrapper">
         <img id="machine" src="{% static 'core_lab/images/maquina_ensayo_nueva.png' %}" alt="Máquina de Ensayo Universal">
-        <div id="mordaza-superior"></div>
-        <div id="mordaza-inferior"></div>
       </div>
     </div>
-
     <div class="graph-section">
       <canvas id="grafica" width="600" height="300"></canvas>
       <p class="placeholder-text">Selecciona un material y tipo de ensayo para iniciar la simulación.</p>
     </div>
   </div>
 
-  <!-- 🎛️ Controles -->
   <div class="controls">
     <button id="play-btn">▶ Iniciar Simulación</button>
     <button id="reset-btn">🔁 Reiniciar</button>
   </div>
 
-  <!-- 📊 Tabla de datos -->
   <div class="table-section">
     <h2>Datos del Ensayo</h2>
     <table id="tabla-datos">
@@ -67,4 +61,11 @@
     </table>
   </div>
 </div>
+{% endblock %}
+
+{% block scripts %}
+  <script>
+      const OBTENER_DATOS_URL = "{% url 'obtener_datos' %}";
+  </script>
+  <script src="{% static 'core_lab/js/simulacion.js' %}"></script>
 {% endblock %}

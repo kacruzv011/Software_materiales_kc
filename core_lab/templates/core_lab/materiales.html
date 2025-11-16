@@ -1,32 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}CoreLab - Catálogo de Materiales{% endblock %}
+
 {% block content %}
-<div class="materials-container" style="max-width: 800px; margin: auto; padding: 20px;">
-  <h1>Conjuntos de Datos de Materiales Disponibles</h1>
-  <p>Aquí puedes descargar los datos crudos en formato CSV utilizados en las simulaciones.</p>
+<div class="container" style="padding: 20px;">
+    <h1>Catálogo de Materiales</h1>
+    <p>Esta es la lista de materiales disponibles actualmente en la base de datos para la simulación.</p>
 
-  {% if materiales_disponibles %}
-    {% for material, ensayos in materiales_disponibles.items %}
-      <div class="material-card" style="background-color: #ffffff; border: 1px solid #ddd; border-radius: 8px; margin-bottom: 20px; padding: 20px;">
-        <h2 style="margin-top: 0;">{{ material }}</h2>
-        <p>Datos de ensayos disponibles para descargar:</p>
-        <ul style="list-style-type: none; padding-left: 0;">
-          {% for ensayo in ensayos %}
-            <li style="margin-bottom: 10px;">
-              <!-- El enlace de descarga -->
-              <a href="{% url 'descargar_csv' material_nombre=material tipo_ensayo=ensayo %}" 
-                 style="text-decoration: none; background-color: #007bff; color: white; padding: 8px 15px; border-radius: 5px; display: inline-block;">
-                Descargar Ensayo de {{ ensayo|capfirst }}
-              </a>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endfor %}
-  {% else %}
-    <p>No se encontraron conjuntos de datos de materiales.</p>
-  {% endif %}
+    <!-- Eliminamos el botón de descarga general de aquí -->
 
+    <table class="table" style="width: 100%; margin-top: 20px; border-collapse: collapse; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+        <thead style="background-color: #f8f9fa;">
+            <tr>
+                <th style="padding: 12px; border: 1px solid #dee2e6; text-align: left;">Nombre del Material</th>
+                
+                <!-- 👇 1. AÑADIMOS LA CABECERA DE LA NUEVA COLUMNA 👇 -->
+                <th style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for material in materiales %}
+            <tr>
+                <td style="padding: 12px; border: 1px solid #dee2e6;">{{ material.nombre_display }}</td>
+
+                <!-- 👇 2. AÑADIMOS LA CELDA CON EL BOTÓN DE DESCARGA ESPECÍFICO 👇 -->
+                <td style="padding: 12px; border: 1px solid #dee2e6; text-align: center;">
+                  {# Este enlace genera la URL correcta para CADA material en el bucle #}
+                  <a href="{% url 'download_material_data' material.nombre %}"
+                     style="padding: 8px 12px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px; font-size: 0.9em;">
+                    Descargar Datos (CSV)
+                  </a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                {# 3. AJUSTAMOS EL 'COLSPAN' PARA QUE OCUPE LAS 2 COLUMNAS #}
+                <td colspan="2" style="padding: 12px; text-align: center; color: #6c757d;">
+                    No hay materiales registrados en la base de datos todavía.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}
