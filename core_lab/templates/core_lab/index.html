@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>CoreLab - Máquina Universal Interactiva</title>
+  <link rel="stylesheet" href="{% static 'core_lab/css/style.css' %}">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <nav class="topbar">
+    <div class="brand">CoreLab</div>
+    <div class="menu">
+      <a href="{% url 'core_lab:home' %}">Inicio</a>
+      <a href="#materials">Materiales</a>
+      <a href="#simulation">Simulación</a>
+      <a href="#graficas">Gráficas</a>
+    </div>
+  </nav>
+
+  <header class="hero">
+    <h1>Bienvenido a CoreLab 👋</h1>
+    <p>Herramienta pedagógica para explorar propiedades de materiales y experimentos con una máquina universal de ensayos.</p>
+  </header>
+
+  <main class="container">
+    <!-- MATERIALS (tabla vacía) -->
+    <section id="materials" class="card" style="grid-column:1/span2;">
+      <h2>Materiales</h2>
+      <p>Tabla vacía (lista de materiales se conectará a la BD más adelante)</p>
+      <table id="materials-table" class="table">
+        <thead>
+          <tr><th>Nombre</th><th>Densidad</th><th>Módulo E</th><th>Resistencia</th><th>Observaciones</th></tr>
+        </thead>
+        <tbody>
+          <!-- vacío por ahora -->
+        </tbody>
+      </table>
+    </section>
+
+    <!-- SIMULATION: Máquina universal 2D interactiva -->
+    <section id="simulation" class="card">
+      <h2>Máquina Universal de Ensayos (interactiva)</h2>
+
+      <div class="machine-layout">
+        <!-- SVG de la máquina -->
+        <svg id="machine-svg" viewBox="0 0 600 500" width="100%" height="350" preserveAspectRatio="xMidYMid meet">
+          <!-- columnas -->
+          <rect x="50" y="30" width="40" height="420" fill="#333" rx="6"></rect>
+          <rect x="510" y="30" width="40" height="420" fill="#333" rx="6"></rect>
+
+          <!-- travesaño superior (móvil) - crosshead -->
+          <g id="crosshead" transform="translate(120,80)">
+            <rect x="0" y="-10" width="360" height="24" fill="#444" rx="6"></rect>
+            <!-- actuator (centro) -->
+            <rect x="170" y="14" width="20" height="40" fill="#666" rx="3"></rect>
+          </g>
+
+          <!-- mordazas (superior e inferior) -->
+          <g id="upper-grip" transform="translate(290,120)">
+            <rect x="-30" y="0" width="60" height="14" fill="#222" rx="3"></rect>
+          </g>
+          <g id="lower-grip" transform="translate(290,300)">
+            <rect x="-30" y="0" width="60" height="14" fill="#222" rx="3"></rect>
+          </g>
+
+          <!-- probeta (entre mordazas) -->
+          <g id="specimen" transform="translate(290,134)">
+            <!-- la probeta será un rect pequeño que cambia tamaño según la deformación -->
+            <rect id="specimen-rect" x="-8" y="0" width="16" height="120" fill="#b5532b" rx="6"></rect>
+          </g>
+
+          <!-- base -->
+          <rect x="0" y="460" width="600" height="30" fill="#1f2937"></rect>
+        </svg>
+      </div>
+
+      <!-- Controles -->
+      <div class="controls" style="margin-top:12px; display:flex; gap:12px; flex-wrap:wrap;">
+        <label>Material:
+          <select id="ui-material">
+            <option value="">-- Seleccionar (vacío) --</option>
+          </select>
+        </label>
+
+        <label>Ensayo:
+          <select id="ui-test">
+            <option value="traccion">Tracción</option>
+            <option value="compresion">Compresión</option>
+            <option value="torsion">Torsión</option>
+            <option value="fatiga">Fatiga</option>
+          </select>
+        </label>
+
+        <button id="btn-play">▶️ Play</button>
+        <button id="btn-pause">⏸️ Pause</button>
+        <button id="btn-step">⤴️ Paso</button>
+
+        <label>Velocidad:
+          <input id="speed" type="range" min="0.2" max="3" step="0.1" value="1">
+        </label>
+
+        <label>Carga (kN):
+          <input id="force" type="range" min="0" max="100" step="1" value="0">
+        </label>
+
+        <button id="btn-reset" class="secondary">Reset</button>
+      </div>
+
+      <!-- Panel datos de la simulación -->
+      <div style="margin-top:16px;">
+        <h4>Datos de la simulación (vacío)</h4>
+        <table id="sim-data-table" class="table">
+          <thead><tr><th>t (s)</th><th>Deformación</th><th>Esfuerzo (Pa)</th></tr></thead>
+          <tbody><!-- vacío --></tbody>
+        </table>
+
+        <div style="margin-top:8px; display:flex; gap:8px;">
+          <button id="btn-download-csv">Descargar CSV</button>
+          <button id="btn-download-png">Descargar Gráfica PNG</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- GRÁFICAS (Chart.js + placeholder) -->
+    <section id="graficas" class="card">
+      <h2>Gráficas</h2>
+      <canvas id="chartED" width="800" height="320"></canvas>
+      <p id="chart-note" class="muted">La gráfica está vacía; se rellenará cuando ejecutes una simulación.</p>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 CoreLab — Laboratorio Virtual de Materiales (educativo)</p>
+  </footer>
+
+  <script src="{% static 'core_lab/js/machine.js' %}"></script>
+</body>
+</html>
