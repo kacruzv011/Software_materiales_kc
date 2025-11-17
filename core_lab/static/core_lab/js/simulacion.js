@@ -1,110 +1,120 @@
-// ==========================================================
-//  SIMULACION.JS - VERSIÓN FINAL Y CORREGIDA
-// ==========================================================
-document.addEventListener("DOMContentLoaded", () => {
-  // Variable global para mantener la instancia del gráfico
-  let chartInstance = null;
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Simulación JS Final (sin saltos) cargado.");
 
-  // Obtenemos todos los elementos del DOM
-  const tipoEnsayoSelect = document.getElementById("tipo-ensayo");
-  const materialSelect = document.getElementById("material");
-  const playBtn = document.getElementById("play-btn");
-  const resetBtn = document.getElementById("reset-btn");
-  const tablaDatos = document.getElementById("tabla-datos").querySelector("tbody");
-  const canvas = document.getElementById("grafica");
-  const ctx = canvas.getContext("2d");
+    // ==================================================================
+    //  ZONA DE CONFIGURACIÓN
+    // ==================================================================
+    const DRAG_LIMITS_Y = {
+        compresion_start: '20%',
+        tension_start:    '29%'
+    };
+    const PIXELS_POR_PUNTO = 2; // Ajusta este valor según la sensibilidad deseada
+    // ==================================================================
 
-  // Función para crear o actualizar el gráfico
-  function crearGrafico(labels = [], data = [], xLabel = "Deformación (%)", yLabel = "Esfuerzo (Pa)") {
-    if (chartInstance) {
-      chartInstance.destroy();
+    const materialSelect = document.getElementById('material-select');
+    const tipoEnsayoSelect = document.getElementById('tipo-ensayo-select');
+    const mordaza = document.getElementById('mordaza-superior-movil');
+    const handleTorsion = document.getElementById('handle-torsion');
+    const canvas = document.getElementById('grafica');
+    const tablaDatosBody = document.getElementById('tabla-datos').querySelector('tbody');
+    const placeholderText = document.getElementById('placeholder-text');
+
+    let chartInstance, datosEnsayoCompletos = [], isDragging = false, lastMousePos = 0, currentIndex = -1;
+
+    async function cargarDatos() {
+        const material = materialSelect.value, ensayo = tipoEnsayoSelect.value;
+        if (!material || !ensayo) return;
+        reiniciarEstado(ensayo);
+        placeholderText.textContent = "Cargando datos...";
+        try {
+            const response = await fetch(`${OBTENER_DATOS_URL}?material=${material}&tipo_ensayo=${ensayo}`);
+            const data = await response.json();
+            if (!data.success) throw new Error(data.error);
+            datosEnsayoCompletos = data.datos_tabla;
+            placeholderText.textContent = `¡Listo! Inicia el ensayo de ${ensayo}.`;
+            if (ensayo === 'torsion') handleTorsion.style.cursor = 'ew-resize';
+            else mordaza.style.cursor = 'grab';
+        } catch (err) { placeholderText.textContent = `Error: ${err.message}`; }
     }
-    chartInstance = new Chart(ctx, {
-      type: "line",
-      data: {
-        labels: labels,
-        datasets: [{
-          label: "Esfuerzo vs Deformación",
-          data: data,
-          borderColor: "#007bff",
-          borderWidth: 2,
-          pointRadius: 0,
-          tension: 0.3
-        }]
-      },
-      options: {
-        responsive: true,
-        maintainAspectRatio: false,
-        scales: {
-          x: { title: { display: true, text: xLabel } },
-          y: { title: { display: true, text: yLabel, beginAtZero: true } }
-        },
-        plugins: {
-          legend: { display: true, position: "top" }
+    materialSelect.addEventListener('change', cargarDatos);
+    tipoEnsayoSelect.addEventListener('change', cargarDatos);
+
+    function onMouseDown(e) {
+        if (datosEnsayoCompletos.length === 0) return;
+        isDragging = true;
+        const ensayo = tipoEnsayoSelect.value;
+        if (ensayo === 'torsion') { lastMousePos = e.clientX; } 
+        else { lastMousePos = e.clientY; mordaza.style.cursor = 'grabbing'; }
+        e.preventDefault();
+    }
+    mordaza.addEventListener('mousedown', onMouseDown);
+    handleTorsion.addEventListener('mousedown', onMouseDown);
+
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        const ensayo = tipoEnsayoSelect.value;
+        let delta = 0, cambioEnIndice = 0, currentMousePos = 0;
+        if (ensayo === 'torsion') { /* Lógica de Torsión aquí */ }
+        else {
+            currentMousePos = e.clientY;
+            delta = currentMousePos - lastMousePos;
+            cambioEnIndice = (ensayo === 'tension') ? -delta / PIXELS_POR_PUNTO : delta / PIXELS_POR_PUNTO;
         }
-      }
+        lastMousePos = currentMousePos;
+        currentIndex += cambioEnIndice;
+        currentIndex = Math.max(0, Math.min(datosEnsayoCompletos.length - 1, currentIndex));
+        actualizarUI(Math.floor(currentIndex));
     });
-  }
 
-  // Función para reiniciar la simulación
-  function reiniciarSimulacion() {
+    window.addEventListener('mouseup', () => { if (isDragging) { isDragging = false; mordaza.style.cursor = 'grab'; } });
+
+    function actualizarUI(index) {
+        if (!chartInstance) return;
+        if (datosEnsayoCompletos.length === 0 || index < 0) {
+            chartInstance.data.labels = []; chartInstance.data.datasets[0].data = [];
+            chartInstance.update('none');
+            tablaDatosBody.innerHTML = `<tr><td colspan="3">Selecciona un material y ensayo</td></tr>`;
+            return;
+        }
+        const puntosHastaAhora = datosEnsayoCompletos.slice(0, index + 1);
+        const puntoActual = datosEnsayoCompletos[index];
+        tablaDatosBody.innerHTML = `<tr><td>${parseFloat(puntoActual.tiempo).toFixed(2)}</td><td>${parseFloat(puntoActual.deformacion).toFixed(4)}</td><td>${parseFloat(puntoActual.esfuerzo).toExponential(2)}</td></tr>`;
+        chartInstance.data.labels = puntosHastaAhora.map(d => d.deformacion);
+        chartInstance.data.datasets[0].data = puntosHastaAhora.map(d => d.esfuerzo);
+        chartInstance.update('none');
+        
+        const porcentajeDeAvance = index / (datosEnsayoCompletos.length - 1);
+        const limiteSuperiorPx = mordaza.parentElement.offsetHeight * (parseFloat(DRAG_LIMITS_Y.compresion_start) / 100);
+        const limiteInferiorPx = mordaza.parentElement.offsetHeight * (parseFloat(DRAG_LIMITS_Y.tension_start) / 100);
+        const rangoDeArrastrePx = limiteInferiorPx - limiteSuperiorPx;
+        
+        const newTop = (tipoEnsayoSelect.value === 'compresion') 
+                        ? limiteSuperiorPx + (rangoDeArrastrePx * porcentajeDeAvance) 
+                        : limiteInferiorPx - (rangoDeArrastrePx * porcentajeDeAvance);
+        mordaza.style.top = `${newTop}px`;
+    }
+    
+    function crearGrafico() {
+        if (chartInstance) chartInstance.destroy();
+        const ctx = canvas.getContext('2d');
+        chartInstance = new Chart(ctx, { type: "line", data: { labels: [], datasets: [{ label: "Esfuerzo vs Deformación", data: [], borderColor: "#007bff", borderWidth: 2, pointRadius: 0, tension: 0.1 }] }, options: { responsive: true, maintainAspectRatio: false, scales: { x: { title: { display: true, text: "Deformación (%)" } }, y: { title: { display: true, text: "Esfuerzo (Pa)" }, ticks: { callback: (value) => (typeof value === 'number') ? value.toExponential(1) : value } } }, plugins: { legend: { display: true, position: 'top' } } } });
+    }
+
+    function reiniciarEstado(ensayoSeleccionado = null) {
+        const ensayo = ensayoSeleccionado || tipoEnsayoSelect.value;
+        datosEnsayoCompletos = [], currentIndex = -1, isDragging = false;
+        
+        actualizarUI(-1);
+        placeholderText.textContent = "Selecciona un material y ensayo para comenzar.";
+        handleTorsion.style.display = 'none';
+        mordaza.style.cursor = 'not-allowed';
+
+        if (ensayo === 'torsion') { handleTorsion.style.display = 'block'; mordaza.style.top = '25%'; } 
+        else if (ensayo === 'compresion') { mordaza.style.top = DRAG_LIMITS_Y.compresion_start; } 
+        else { mordaza.style.top = DRAG_LIMITS_Y.tension_start; }
+    }
+    
+    materialSelect.selectedIndex = 0, tipoEnsayoSelect.selectedIndex = 0;
     crearGrafico();
-    tablaDatos.innerHTML = `<tr><td colspan="3">Selecciona material y ensayo</td></tr>`;
-  }
-
-  resetBtn.addEventListener("click", reiniciarSimulacion);
-
-  // Función para cargar los datos desde la API de Django
-  async function cargarDatos(materialNombre, tipoEnsayo) {
-    //
-    // ▼▼▼ ¡ESTA ES LA LÍNEA QUE HEMOS CORREGIDO! ▼▼▼
-    // Ahora usa la variable OBTENER_DATOS_URL que nos proporciona Django
-    const url = `${OBTENER_DATOS_URL}?material=${encodeURIComponent(materialNombre)}&tipo_ensayo=${encodeURIComponent(tipoEnsayo)}`;
-    // ▲▲▲ ¡LÍNEA CORREGIDA! ▲▲▲
-    //
-    try {
-      const response = await fetch(url);
-      const data = await response.json();
-
-      if (!data.success) {
-        throw new Error(data.error);
-      }
-
-      const labels = data.datos_grafica.map(d => d.x);
-      const values = data.datos_grafica.map(d => d.y);
-
-      const filas = data.datos_tabla.map(fila => `
-        <tr>
-          <td>${parseFloat(fila.tiempo).toFixed(2)}</td>
-          <td>${parseFloat(fila.deformacion).toFixed(4)}</td>
-          <td>${parseFloat(fila.esfuerzo).toFixed(4)}</td>
-        </tr>`).join("");
-      
-      tablaDatos.innerHTML = filas;
-      
-      crearGrafico(labels, values, data.eje_x_label, data.eje_y_label);
-
-    } catch (err) {
-      console.error("❌ Error al obtener datos:", err);
-      tablaDatos.innerHTML = `<tr><td colspan="3">Error: ${err.message}</td></tr>`;
-      reiniciarSimulacion();
-    }
-  }
-
-  // Event Listener para el botón "Iniciar Simulación"
-  playBtn.addEventListener("click", () => {
-    const materialNombre = materialSelect.value;
-    const tipo = tipoEnsayoSelect.value;
-    
-    if (!materialNombre || !tipo) {
-      alert("Selecciona un material y un tipo de ensayo antes de iniciar.");
-      return;
-    }
-    
-    tablaDatos.innerHTML = `<tr><td colspan="3">Cargando datos...</td></tr>`;
-    cargarDatos(materialNombre, tipo);
-  });
-
-  // Al cargar la página, creamos el gráfico vacío inicial
-  crearGrafico();
+    reiniciarEstado();
 });
