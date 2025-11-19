@@ -1,16 +1,84 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log("Simulación JS Final (sin saltos) cargado.");
+    console.log("Simulación JS (Torsión Corregida) cargado.");
 
     // ==================================================================
-    //  ZONA DE CONFIGURACIÓN
+    //  ZONA DE CONFIGURACIÓN - NO SE TOCA
     // ==================================================================
     const DRAG_LIMITS_Y = {
         compresion_start: '20%',
         tension_start:    '29%'
     };
-    const PIXELS_POR_PUNTO = 2; // Ajusta este valor según la sensibilidad deseada
+    const PIXELS_POR_PUNTO = 2;
     // ==================================================================
 
+    const materialSelect = document.getElementById('material-select');
+    const tipoEnsayoSelect = document.getElementById('tipo-ensayo-select');
+    const mordaza = document.getElementById('mordaza-superior-movil');
+    const handleTorsion = document.getElementById('handle-torsion');
+    // ... (resto de las constantes sin cambios) ...
+    let chartInstance, datosEnsayoCompletos = [], isDragging = false, lastMousePos = 0, currentIndex = -1;
+    // ... (cargarDatos sin cambios) ...
+
+    // --- onMouseDown (Sin cambios, ya estaba listo para esto) ---
+    function onMouseDown(e) {
+        if (datosEnsayoCompletos.length === 0) return;
+        isDragging = true;
+        const ensayo = tipoEnsayoSelect.value;
+        if (ensayo === 'torsion') { 
+            lastMousePos = e.clientX; // Guarda la posición X
+        } else { 
+            lastMousePos = e.clientY; // Guarda la posición Y
+            mordaza.style.cursor = 'grabbing';
+        }
+        e.preventDefault();
+    }
+    mordaza.addEventListener('mousedown', onMouseDown);
+    handleTorsion.addEventListener('mousedown', onMouseDown);
+
+    // --- mousemove (¡AQUÍ ESTÁ LA CORRECCIÓN!) ---
+    window.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        
+        const ensayo = tipoEnsayoSelect.value;
+        let delta = 0, cambioEnIndice = 0, currentMousePos = 0;
+        
+        // --- 1. Separamos la lógica de detección de movimiento ---
+        if (ensayo === 'torsion') {
+            currentMousePos = e.clientX;
+            delta = currentMousePos - lastMousePos;
+            cambioEnIndice = delta / PIXELS_POR_PUNTO;
+        } else {
+            currentMousePos = e.clientY;
+            delta = currentMousePos - lastMousePos;
+            cambioEnIndice = (ensayo === 'tension') ? -delta / PIXELS_POR_PUNTO : delta / PIXELS_POR_PUNTO;
+        }
+        
+        // --- 2. Esta parte es común y no necesita cambios ---
+        lastMousePos = currentMousePos;
+        currentIndex += cambioEnIndice;
+        currentIndex = Math.max(0, Math.min(datosEnsayoCompletos.length - 1, currentIndex));
+        
+        // --- 3. Llamamos a actualizarUI (sin cambios) ---
+        actualizarUI(Math.floor(currentIndex));
+    });
+
+    // --- mouseup (Sin cambios, ya estaba listo para esto) ---
+    window.addEventListener('mouseup', () => { 
+        if (isDragging) { 
+            isDragging = false; 
+            mordaza.style.cursor = 'grab'; 
+        } 
+    });
+
+    // ... (resto de funciones actualizarUI, crearGrafico, reiniciarEstado sin cambios) ...
+    // Tu lógica en reiniciarEstado que muestra/oculta el handleTorsion ya es correcta.
+});
+
+// === AQUÍ ESTÁ EL CÓDIGO COMPLETO Y LISTO PARA COPIAR Y PEGAR ===
+document.addEventListener('DOMContentLoaded', () => {
+    console.log("Simulación JS (Torsión Corregida) cargado.");
+    const DRAG_LIMITS_Y = { compresion_start: '20%', tension_start: '29%' };
+    const PIXELS_POR_PUNTO = 2;
     const materialSelect = document.getElementById('material-select');
     const tipoEnsayoSelect = document.getElementById('tipo-ensayo-select');
     const mordaza = document.getElementById('mordaza-superior-movil');
@@ -18,7 +86,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const canvas = document.getElementById('grafica');
     const tablaDatosBody = document.getElementById('tabla-datos').querySelector('tbody');
     const placeholderText = document.getElementById('placeholder-text');
-
     let chartInstance, datosEnsayoCompletos = [], isDragging = false, lastMousePos = 0, currentIndex = -1;
 
     async function cargarDatos() {
@@ -54,12 +121,17 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!isDragging) return;
         const ensayo = tipoEnsayoSelect.value;
         let delta = 0, cambioEnIndice = 0, currentMousePos = 0;
-        if (ensayo === 'torsion') { /* Lógica de Torsión aquí */ }
-        else {
+        
+        if (ensayo === 'torsion') {
+            currentMousePos = e.clientX;
+            delta = currentMousePos - lastMousePos;
+            cambioEnIndice = delta / PIXELS_POR_PUNTO; // Mover a la derecha avanza el ensayo
+        } else {
             currentMousePos = e.clientY;
             delta = currentMousePos - lastMousePos;
             cambioEnIndice = (ensayo === 'tension') ? -delta / PIXELS_POR_PUNTO : delta / PIXELS_POR_PUNTO;
         }
+
         lastMousePos = currentMousePos;
         currentIndex += cambioEnIndice;
         currentIndex = Math.max(0, Math.min(datosEnsayoCompletos.length - 1, currentIndex));
@@ -87,7 +159,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const limiteSuperiorPx = mordaza.parentElement.offsetHeight * (parseFloat(DRAG_LIMITS_Y.compresion_start) / 100);
         const limiteInferiorPx = mordaza.parentElement.offsetHeight * (parseFloat(DRAG_LIMITS_Y.tension_start) / 100);
         const rangoDeArrastrePx = limiteInferiorPx - limiteSuperiorPx;
-        
         const newTop = (tipoEnsayoSelect.value === 'compresion') 
                         ? limiteSuperiorPx + (rangoDeArrastrePx * porcentajeDeAvance) 
                         : limiteInferiorPx - (rangoDeArrastrePx * porcentajeDeAvance);
@@ -109,9 +180,14 @@ document.addEventListener('DOMContentLoaded', () => {
         handleTorsion.style.display = 'none';
         mordaza.style.cursor = 'not-allowed';
 
-        if (ensayo === 'torsion') { handleTorsion.style.display = 'block'; mordaza.style.top = '25%'; } 
-        else if (ensayo === 'compresion') { mordaza.style.top = DRAG_LIMITS_Y.compresion_start; } 
-        else { mordaza.style.top = DRAG_LIMITS_Y.tension_start; }
+        if (ensayo === 'torsion') { 
+            handleTorsion.style.display = 'block'; 
+            mordaza.style.top = '25%'; // <-- Puedes ajustar la pos neutral de la mordaza para torsión aquí
+        } else if (ensayo === 'compresion') { 
+            mordaza.style.top = DRAG_LIMITS_Y.compresion_start; 
+        } else { 
+            mordaza.style.top = DRAG_LIMITS_Y.tension_start; 
+        }
     }
     
     materialSelect.selectedIndex = 0, tipoEnsayoSelect.selectedIndex = 0;
