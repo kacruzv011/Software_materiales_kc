@@ -1,3 +1,20 @@
+# ⚙️ Pedagogical Simulator of a Universal Testing Machine
+
+Un simulador web educativo, desarrollado en Django, para la caracterización mecánica de materiales mediante ensayos virtuales de tensión, compresión y torsión.
+
+**Autores:** Kevin Cruz, [Nombre del Profesor]
+
+## ⚖️ Licencia y Descargo de Responsabilidad
+
+Este proyecto se distribuye bajo los términos de la **Licencia Pública General de GNU v3 (GPLv3)**. Para más detalles, consulta el archivo `LICENSE`.
+
+### Disclaimer
+
+1.  **Naturaleza de los Datos:** Este es un simulador con fines **estrictamente educativos**. Los datos de las curvas de ensayo son **sintéticos** y generados por modelos matemáticos. **NO deben ser utilizados para diseño de ingeniería en el mundo real.**
+
+2.  **Fuente de las Propiedades:** Las propiedades de entrada para los modelos han sido extraídas de las fichas técnicas públicas de [MatWeb.com](https://www.matweb.com). Agradecemos a MatWeb por este invaluable recurso. Este proyecto no está afiliado ni respaldado por MatWeb 
+
+
 # 🧪 Software de Simulación de Materiales
 
 Este proyecto es un **software web desarrollado en Django** que permite realizar **simulaciones mecánicas de materiales** a partir de datos almacenados en una base de datos.  

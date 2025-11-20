@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CoreLab - Bienvenido a tu Laboratorio Virtual{% endblock %}
+
+{% block content %}
+<div class="home-container">
+
+    <!-- HERO SECTION -->
+    <section class="hero-section">
+        <h1>Bienvenido a Pedagogical simulator of a universal testing machine 👋</h1>
+        <p class="subtitle">Explora, ensaya y comprende las propiedades mecánicas de los materiales de una forma interactiva y visual.</p>
+        <div class="cta-buttons">
+            <a href="{% url 'simulacion' %}" class="cta-button primary">
+                🧪 Iniciar una Simulación
+            </a>
+            <a href="{% url 'materiales' %}" class="cta-button secondary">
+                📚 Explorar Materiales
+            </a>
+        </div>
+    </section>
+
+    <!-- HOW-TO SECTION (NUEVA) -->
+    <section class="info-section">
+        <h2>¿Cómo Funciona?</h2>
+        <div class="tests-grid">
+            <div class="test-card"><h3><span class="icon">①</span> Selecciona</h3><p>Elige un material y un tipo de ensayo en el simulador.</p></div>
+            <div class="test-card"><h3><span class="icon">②</span> Arrastra</h3><p>Mueve la mordaza o el mango de torsión para controlar el ensayo.</p></div>
+            <div class="test-card"><h3><span class="icon">③</span> Observa</h3><p>Mira cómo el gráfico y la tabla responden a tu acción en tiempo real.</p></div>
+        </div>
+    </section>
+
+    <!-- ENSAYOS SECTION -->
+    <section class="info-section">
+        <h2>Explora los Ensayos Fundamentales</h2>
+        <div class="tests-grid">
+            <article class="test-card">
+                <h3><span class="icon">↔️</span> Ensayo de Tensión</h3>
+                <p>Estiramos un material para medir su <strong>ductilidad</strong> y <strong>resistencia</strong>.</p>
+                <ul>
+                    <li><strong>Clave del Gráfico:</strong> La pendiente inicial mide la rigidez (Módulo de Young).</li>
+                </ul>
+            </article>
+            <article class="test-card">
+                <h3><span class="icon">↕️</span> Ensayo de Compresión</h3>
+                <p>Comprimimos un material para ver cómo resiste el aplastamiento, ideal para materiales frágiles.</p>
+                 <ul>
+                    <li><strong>Clave del Gráfico:</strong> Observa si la falla es súbita o si hay deformación.</li>
+                </ul>
+            </article>
+            <article class="test-card">
+                <h3><span class="icon">🔄</span> Ensayo de Torsión</h3>
+                <p>Retorcemos el material para entender su comportamiento ante esfuerzos de cizalladura (ejes, tornillos).</p>
+                <ul>
+                    <li><strong>Clave del Gráfico:</strong> Permite obtener la resistencia a la distorsión.</li>
+                </ul>
+            </article>
+        </div>
+    </section>
+
+    <!-- DEVELOPER SECTION -->
+    <section class="info-section developer-card">
+        <h2>Sobre el Proyecto</h2>
+        <p>
+            Proyecto desarrollado por <strong>Kevin Cruz</strong>, bajo la dirección de <strong>Carlos Vasco</strong>, en la <strong>Universidad Distrital</strong>.<br>Creado como una herramienta pedagógica para la experimentación virtual en la ciencia de materiales.
+        </p>
+    </section>
+
+</div>
+{% endblock %}
