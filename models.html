@@ -1,48 +1,118 @@
+
+
 <!DOCTYPE html>
+<html class="writer-html5" lang="es" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
-<html lang="en" data-content_root="./">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
-
-    <title>Modelos de la Aplicación &#8212; CoreLab 4.0.0 documentation</title>
-    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=5ecbeea2" />
-    <link rel="stylesheet" type="text/css" href="_static/alabaster.css?v=12dfc556" />
-    <script src="_static/documentation_options.js?v=3304f9e4"></script>
-    <script src="_static/doctools.js?v=9bcbadda"></script>
-    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
-    <link rel="index" title="Index" href="genindex.html" />
-    <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Referencia de la API" href="api.html" />
-   
-  <link rel="stylesheet" href="_static/custom.css" type="text/css" />
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modelos de la Aplicación &mdash; documentación de PSUTM Simulator - 4.0.0</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
 
   
-  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=889665a8"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+      <script src="_static/translations.js?v=f85f4cfb"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Índice" href="genindex.html" />
+    <link rel="search" title="Búsqueda" href="search.html" />
+    <link rel="prev" title="Referencia de la API" href="api.html" /> 
+</head>
 
-  </head><body>
-  
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
 
-    <div class="document">
-      <div class="documentwrapper">
-        <div class="bodywrapper">
           
+          
+          <a href="index.html" class="icon icon-home">
+            PSUTM Simulator
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Buscar documentos" aria-label="Buscar documentos" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Guía de Usuario:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Guía de Inicio Rápido</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Referencia de la API:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="api.html">Referencia de la API</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Modelos de la Aplicación</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Ensayo"><code class="docutils literal notranslate"><span class="pre">Ensayo</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Ensayo.tipo"><code class="docutils literal notranslate"><span class="pre">Ensayo.tipo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Ensayo.descripcion"><code class="docutils literal notranslate"><span class="pre">Ensayo.descripcion</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Ensayo.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Ensayo.DoesNotExist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Ensayo.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Ensayo.MultipleObjectsReturned</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Material"><code class="docutils literal notranslate"><span class="pre">Material</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Material.Categoria"><code class="docutils literal notranslate"><span class="pre">Material.Categoria</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Material.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Material.DoesNotExist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Material.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Material.MultipleObjectsReturned</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Material.nombre_display"><code class="docutils literal notranslate"><span class="pre">Material.nombre_display</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Simulacion"><code class="docutils literal notranslate"><span class="pre">Simulacion</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.material"><code class="docutils literal notranslate"><span class="pre">Simulacion.material</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.ensayo"><code class="docutils literal notranslate"><span class="pre">Simulacion.ensayo</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.resultados"><code class="docutils literal notranslate"><span class="pre">Simulacion.resultados</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.fecha_creacion"><code class="docutils literal notranslate"><span class="pre">Simulacion.fecha_creacion</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.DoesNotExist"><code class="docutils literal notranslate"><span class="pre">Simulacion.DoesNotExist</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#corelab.models.Simulacion.MultipleObjectsReturned"><code class="docutils literal notranslate"><span class="pre">Simulacion.MultipleObjectsReturned</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
-          <div class="body" role="main">
-            
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PSUTM Simulator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Modelos de la Aplicación</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/models.rst.txt" rel="nofollow"> Ver código fuente de la página</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
   <section id="modelos-de-la-aplicacion">
-<h1>Modelos de la Aplicación<a class="headerlink" href="#modelos-de-la-aplicacion" title="Link to this heading">¶</a></h1>
+<h1>Modelos de la Aplicación<a class="headerlink" href="#modelos-de-la-aplicacion" title="Link to this heading"></a></h1>
 <p>Este módulo define la estructura de la base de datos para la aplicación <code class="docutils literal notranslate"><span class="pre">corelab</span></code>.</p>
 <dl class="py class" id="module-corelab.models">
 <dt class="sig sig-object py" id="corelab.models.Ensayo">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Ensayo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Ensayo"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Ensayo" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Ensayo</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Ensayo"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#corelab.models.Ensayo" title="Link to this definition"></a></dt>
 <dd><p>Representa un tipo de ensayo mecánico (ej. Tensión, Compresión).</p>
 <p>Este modelo es actualmente un placeholder y podría expandirse en el futuro para
 almacenar parámetros específicos de cada tipo de ensayo.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Ensayo.tipo">
-<span class="sig-name descname"><span class="pre">tipo</span></span><a class="headerlink" href="#corelab.models.Ensayo.tipo" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">tipo</span></span><a class="headerlink" href="#corelab.models.Ensayo.tipo" title="Link to this definition"></a></dt>
 <dd><p>El nombre del ensayo.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -53,7 +123,7 @@ almacenar parámetros específicos de cada tipo de ensayo.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Ensayo.descripcion">
-<span class="sig-name descname"><span class="pre">descripcion</span></span><a class="headerlink" href="#corelab.models.Ensayo.descripcion" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">descripcion</span></span><a class="headerlink" href="#corelab.models.Ensayo.descripcion" title="Link to this definition"></a></dt>
 <dd><p>Una descripción opcional más detallada.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -64,19 +134,19 @@ almacenar parámetros específicos de cada tipo de ensayo.</p>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Ensayo.DoesNotExist">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Ensayo.DoesNotExist" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Ensayo.DoesNotExist" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Ensayo.MultipleObjectsReturned">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Ensayo.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Ensayo.MultipleObjectsReturned" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="corelab.models.Material">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Material" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#corelab.models.Material" title="Link to this definition"></a></dt>
 <dd><p>Representa un material único y sus propiedades intrínsecas en la base de datos.</p>
 <p>Este modelo es la entidad central del proyecto. Almacena la información
 identificativa clave de cada material que puede ser seleccionado y utilizado
@@ -85,10 +155,10 @@ en las simulaciones de ensayos mecánicos.</p>
 materiales del simulador.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="corelab.models.Material.Categoria">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material.Categoria"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Material.Categoria" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material.Categoria"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#corelab.models.Material.Categoria" title="Link to this definition"></a></dt>
 <dd><p>Define las categorías de materiales permitidas como una enumeración fija.</p>
 <p>El uso de <cite>models.TextChoices</cite> es una buena práctica de Django que
-garantiza la integridad de los datos, ya que el campo ‘categoria’
+garantiza la integridad de los datos, ya que el campo “categoria”
 solo puede aceptar uno de estos valores.</p>
 <p>Cada miembro de la enumeración es una tupla:
 (valor_almacenado_en_db, etiqueta_legible_para_humanos)</p>
@@ -96,29 +166,29 @@ solo puede aceptar uno de estos valores.</p>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Material.DoesNotExist">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Material.DoesNotExist" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Material.DoesNotExist" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Material.MultipleObjectsReturned">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Material.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Material.MultipleObjectsReturned" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py property">
 <dt class="sig sig-object py" id="corelab.models.Material.nombre_display">
-<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nombre_display</span></span><a class="headerlink" href="#corelab.models.Material.nombre_display" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nombre_display</span></span><a class="headerlink" href="#corelab.models.Material.nombre_display" title="Link to this definition"></a></dt>
 <dd><p>Propiedad calculada que devuelve el nombre del material en un formato
 limpio y legible para ser mostrado en la interfaz de usuario (UI).</p>
 <p>Este método no se almacena en la base de datos, sino que se calcula
 en tiempo real cada vez que se accede a él.</p>
-<p class="rubric">Example</p>
-<p>Si <cite>self.nombre</cite> es “AISI_1020_Steel”, <cite>self.nombre_display</cite>
-devolverá “AISI 1020 Steel”.</p>
+<p class="rubric">Ejemplo</p>
+<p>Si <cite>self.nombre</cite> es «AISI_1020_Steel», <cite>self.nombre_display</cite>
+devolverá «AISI 1020 Steel».</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dt class="field-odd">Devuelve<span class="colon">:</span></dt>
 <dd class="field-odd"><p>El nombre del material con los guiones bajos reemplazados por espacios.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dt class="field-even">Tipo del valor devuelto<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
 </dd>
 </dl>
@@ -128,13 +198,13 @@ devolverá “AISI 1020 Steel”.</p>
 
 <dl class="py class">
 <dt class="sig sig-object py" id="corelab.models.Simulacion">
-<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Simulacion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Simulacion"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Simulacion" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Simulacion</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Simulacion"><span class="viewcode-link"><span class="pre">[fuente]</span></span></a><a class="headerlink" href="#corelab.models.Simulacion" title="Link to this definition"></a></dt>
 <dd><p>Registra la ejecución de un ensayo específico sobre un material.</p>
 <p>Este modelo actúa como un registro histórico, vinculando un Material y un Ensayo
 y almacenando los resultados generados.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.material">
-<span class="sig-name descname"><span class="pre">material</span></span><a class="headerlink" href="#corelab.models.Simulacion.material" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">material</span></span><a class="headerlink" href="#corelab.models.Simulacion.material" title="Link to this definition"></a></dt>
 <dd><p>Una relación con el material que fue ensayado.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -145,7 +215,7 @@ y almacenando los resultados generados.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.ensayo">
-<span class="sig-name descname"><span class="pre">ensayo</span></span><a class="headerlink" href="#corelab.models.Simulacion.ensayo" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">ensayo</span></span><a class="headerlink" href="#corelab.models.Simulacion.ensayo" title="Link to this definition"></a></dt>
 <dd><p>Una relación con el tipo de ensayo que se realizó.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -156,7 +226,7 @@ y almacenando los resultados generados.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.resultados">
-<span class="sig-name descname"><span class="pre">resultados</span></span><a class="headerlink" href="#corelab.models.Simulacion.resultados" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">resultados</span></span><a class="headerlink" href="#corelab.models.Simulacion.resultados" title="Link to this definition"></a></dt>
 <dd><p>Un campo para almacenar los datos crudos de la simulación
 en formato JSON.</p>
 <dl class="field-list simple">
@@ -168,7 +238,7 @@ en formato JSON.</p>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.fecha_creacion">
-<span class="sig-name descname"><span class="pre">fecha_creacion</span></span><a class="headerlink" href="#corelab.models.Simulacion.fecha_creacion" title="Link to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">fecha_creacion</span></span><a class="headerlink" href="#corelab.models.Simulacion.fecha_creacion" title="Link to this definition"></a></dt>
 <dd><p>La fecha y hora en que se creó el registro.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Type<span class="colon">:</span></dt>
@@ -179,12 +249,12 @@ en formato JSON.</p>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.DoesNotExist">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Simulacion.DoesNotExist" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#corelab.models.Simulacion.DoesNotExist" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="corelab.models.Simulacion.MultipleObjectsReturned">
-<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Simulacion.MultipleObjectsReturned" title="Link to this definition">¶</a></dt>
+<em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#corelab.models.Simulacion.MultipleObjectsReturned" title="Link to this definition"></a></dt>
 <dd></dd></dl>
 
 </dd></dl>
@@ -192,81 +262,33 @@ en formato JSON.</p>
 </section>
 
 
+           </div>
           </div>
-          
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Pie de página">
+        <a href="api.html" class="btn btn-neutral float-left" title="Referencia de la API" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Anterior</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Derechos de autor 2025, Kevin Cruz &amp; Carlos Vasco.</p>
+  </div>
+
+  Compilado con <a href="https://www.sphinx-doc.org/">Sphinx</a> usando un
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">tema</a>
+    proporcionado por <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
         </div>
       </div>
-      <div class="sphinxsidebar" role="navigation" aria-label="Main">
-        <div class="sphinxsidebarwrapper">
-<h1 class="logo"><a href="index.html">CoreLab</a></h1>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
 
-
-
-
-
-
-
-
-<h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Guía de Usuario:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Guía de Inicio Rápido</a></li>
-</ul>
-<p class="caption" role="heading"><span class="caption-text">Referencia de la API:</span></p>
-<ul class="current">
-<li class="toctree-l1"><a class="reference internal" href="api.html">Referencia de la API</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Modelos de la Aplicación</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Ensayo"><code class="docutils literal notranslate"><span class="pre">Ensayo</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Material"><code class="docutils literal notranslate"><span class="pre">Material</span></code></a></li>
-<li class="toctree-l2"><a class="reference internal" href="#corelab.models.Simulacion"><code class="docutils literal notranslate"><span class="pre">Simulacion</span></code></a></li>
-</ul>
-</li>
-</ul>
-
-<div class="relations">
-<h3>Related Topics</h3>
-<ul>
-  <li><a href="index.html">Documentation overview</a><ul>
-      <li>Previous: <a href="api.html" title="previous chapter">Referencia de la API</a></li>
-  </ul></li>
-</ul>
-</div>
-<search id="searchbox" style="display: none" role="search">
-  <h3 id="searchlabel">Quick search</h3>
-    <div class="searchformwrapper">
-    <form class="search" action="search.html" method="get">
-      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
-      <input type="submit" value="Go" />
-    </form>
-    </div>
-</search>
-<script>document.getElementById('searchbox').style.display = "block"</script>
-
-
-
-
-
-
-
-
-        </div>
-      </div>
-      <div class="clearer"></div>
-    </div>
-    <div class="footer">
-      &#169;2025, Kevin Cruz.
-      
-      |
-      Powered by <a href="https://www.sphinx-doc.org/">Sphinx 8.2.3</a>
-      &amp; <a href="https://alabaster.readthedocs.io">Alabaster 0.7.16</a>
-      
-      |
-      <a href="_sources/models.rst.txt"
-          rel="nofollow">Page source</a>
-    </div>
-
-    
-
-    
-  </body>
+</body>
 </html>
