@@ -42,49 +42,91 @@
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
 
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.db</span><span class="w"> </span><span class="kn">import</span> <span class="n">models</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">timezone</span>
+
 <div class="viewcode-block" id="Material">
 <a class="viewcode-back" href="../../models.html#corelab.models.Material">[docs]</a>
 <span class="k">class</span><span class="w"> </span><span class="nc">Material</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">Model</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representa un material único en la base de datos.</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Representa un material único y sus propiedades intrínsecas en la base de datos.</span>
 
-<span class="sd">    Este modelo almacena las propiedades identificativas de cada material que puede ser</span>
-<span class="sd">    utilizado en las simulaciones.</span>
-
-<span class="sd">    Attributes:</span>
-<span class="sd">        nombre (CharField): El identificador único del material. Por convención, debe</span>
-<span class="sd">                            usar guiones bajos en lugar de espacios para mantener la</span>
-<span class="sd">                            consistencia con los nombres de archivo.</span>
-<span class="sd">        categoria (CharField): La clasificación del material (ej. &#39;metales&#39;, &#39;polimericos&#39;),</span>
-<span class="sd">                               definida por las opciones en la clase interna Categoria.</span>
+<span class="sd">    Este modelo es la entidad central del proyecto. Almacena la información</span>
+<span class="sd">    identificativa clave de cada material que puede ser seleccionado y utilizado</span>
+<span class="sd">    en las simulaciones de ensayos mecánicos.</span>
+<span class="sd">    </span>
+<span class="sd">    Cada instancia de este modelo corresponde a una entrada única en el catálogo de</span>
+<span class="sd">    materiales del simulador.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
+
 <div class="viewcode-block" id="Material.Categoria">
 <a class="viewcode-back" href="../../models.html#corelab.models.Material.Categoria">[docs]</a>
     <span class="k">class</span><span class="w"> </span><span class="nc">Categoria</span><span class="p">(</span><span class="n">models</span><span class="o">.</span><span class="n">TextChoices</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Define las categorías de materiales permitidas en la base de datos.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Define las categorías de materiales permitidas como una enumeración fija.</span>
+<span class="sd">        </span>
+<span class="sd">        El uso de `models.TextChoices` es una buena práctica de Django que</span>
+<span class="sd">        garantiza la integridad de los datos, ya que el campo &#39;categoria&#39;</span>
+<span class="sd">        solo puede aceptar uno de estos valores.</span>
+
+<span class="sd">        Cada miembro de la enumeración es una tupla:</span>
+<span class="sd">        (valor_almacenado_en_db, etiqueta_legible_para_humanos)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="n">METALES</span> <span class="o">=</span> <span class="s1">&#39;metales&#39;</span><span class="p">,</span> <span class="s1">&#39;Metales&#39;</span>
         <span class="n">POLIMERICOS</span> <span class="o">=</span> <span class="s1">&#39;polimericos&#39;</span><span class="p">,</span> <span class="s1">&#39;Poliméricos&#39;</span>
         <span class="n">CERAMICOS</span> <span class="o">=</span> <span class="s1">&#39;ceramicos&#39;</span><span class="p">,</span> <span class="s1">&#39;Cerámicos&#39;</span>
         <span class="n">COMPUESTOS</span> <span class="o">=</span> <span class="s1">&#39;compuestos&#39;</span><span class="p">,</span> <span class="s1">&#39;Compuestos&#39;</span></div>
 
 
-    <span class="n">nombre</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">nombre</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+        <span class="n">max_length</span><span class="o">=</span><span class="mi">100</span><span class="p">,</span> 
+        <span class="n">unique</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;El identificador único del material, usado internamente para &quot;</span>
+            <span class="s2">&quot;enlazar con los archivos de datos CSV. Por convención, debe &quot;</span>
+            <span class="s2">&quot;usar guiones bajos en lugar de espacios (ej. &#39;AISI_1020_Steel&#39;).&quot;</span>
+        <span class="p">)</span>
+    <span class="p">)</span>
+    
     <span class="n">categoria</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
         <span class="n">max_length</span><span class="o">=</span><span class="mi">20</span><span class="p">,</span>
         <span class="n">choices</span><span class="o">=</span><span class="n">Categoria</span><span class="o">.</span><span class="n">choices</span><span class="p">,</span>
-        <span class="n">default</span><span class="o">=</span><span class="n">Categoria</span><span class="o">.</span><span class="n">METALES</span>
+        <span class="n">default</span><span class="o">=</span><span class="n">Categoria</span><span class="o">.</span><span class="n">METALES</span><span class="p">,</span>
+        <span class="n">help_text</span><span class="o">=</span><span class="p">(</span>
+            <span class="s2">&quot;Clasificación o familia a la que pertenece el material. Este campo &quot;</span>
+            <span class="s2">&quot;determina qué modelo de simulación se utilizará y cómo se &quot;</span>
+            <span class="s2">&quot;agrupará el material en la interfaz de usuario.&quot;</span>
+        <span class="p">)</span>
     <span class="p">)</span>
 
     <span class="nd">@property</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">nombre_display</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Devuelve el nombre del material en un formato legible para el usuario.</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Propiedad calculada que devuelve el nombre del material en un formato</span>
+<span class="sd">        limpio y legible para ser mostrado en la interfaz de usuario (UI).</span>
+<span class="sd">        </span>
+<span class="sd">        Este método no se almacena en la base de datos, sino que se calcula</span>
+<span class="sd">        en tiempo real cada vez que se accede a él.</span>
+<span class="sd">        </span>
+<span class="sd">        Example:</span>
+<span class="sd">            Si `self.nombre` es &quot;AISI_1020_Steel&quot;, `self.nombre_display`</span>
+<span class="sd">            devolverá &quot;AISI 1020 Steel&quot;.</span>
 
 <span class="sd">        Returns:</span>
-<span class="sd">            str: El nombre del material con guiones bajos reemplazados por espacios.</span>
+<span class="sd">            str: El nombre del material con los guiones bajos reemplazados por espacios.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s1">&#39;_&#39;</span><span class="p">,</span> <span class="s1">&#39; &#39;</span><span class="p">)</span>
 
     <span class="k">def</span><span class="w"> </span><span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-<span class="w">        </span><span class="sd">&quot;&quot;&quot;Representación en cadena del modelo, utilizada en el admin de Django.&quot;&quot;&quot;</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Devuelve la representación en cadena de texto del objeto.</span>
+
+<span class="sd">        Este método es utilizado por Django en muchas partes, especialmente</span>
+<span class="sd">        en el panel de administración, para mostrar una representación</span>
+<span class="sd">        legible de cada instancia del modelo.</span>
+<span class="sd">        </span>
+<span class="sd">        Returns:</span>
+<span class="sd">            str: El nombre legible del material (utiliza `nombre_display`).</span>
+<span class="sd">        &quot;&quot;&quot;</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">nombre_display</span></div>
 
 
@@ -150,9 +192,14 @@
 
 
 <h3>Navigation</h3>
-<p class="caption" role="heading"><span class="caption-text">Contenidos:</span></p>
+<p class="caption" role="heading"><span class="caption-text">Guía de Usuario:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../quickstart.html">Guía de Inicio Rápido</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Referencia de la API:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="../../api.html">Referencia de la API</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../models.html">Modelos de la Aplicación</a></li>
 </ul>
 
 <div class="relations">
