@@ -10,44 +10,86 @@
 from django.db import models
 from django.utils import timezone
 
+from django.db import models
+from django.utils import timezone
+
 class Material(models.Model):
-    """Representa un material único en la base de datos.
+    """Representa un material único y sus propiedades intrínsecas en la base de datos.
 
-    Este modelo almacena las propiedades identificativas de cada material que puede ser
-    utilizado en las simulaciones.
-
-    Attributes:
-        nombre (CharField): El identificador único del material. Por convención, debe
-                            usar guiones bajos en lugar de espacios para mantener la
-                            consistencia con los nombres de archivo.
-        categoria (CharField): La clasificación del material (ej. 'metales', 'polimericos'),
-                               definida por las opciones en la clase interna Categoria.
+    Este modelo es la entidad central del proyecto. Almacena la información
+    identificativa clave de cada material que puede ser seleccionado y utilizado
+    en las simulaciones de ensayos mecánicos.
+    
+    Cada instancia de este modelo corresponde a una entrada única en el catálogo de
+    materiales del simulador.
     """
+
     class Categoria(models.TextChoices):
-        """Define las categorías de materiales permitidas en la base de datos."""
+        """
+        Define las categorías de materiales permitidas como una enumeración fija.
+        
+        El uso de `models.TextChoices` es una buena práctica de Django que
+        garantiza la integridad de los datos, ya que el campo 'categoria'
+        solo puede aceptar uno de estos valores.
+
+        Cada miembro de la enumeración es una tupla:
+        (valor_almacenado_en_db, etiqueta_legible_para_humanos)
+        """
         METALES = 'metales', 'Metales'
         POLIMERICOS = 'polimericos', 'Poliméricos'
         CERAMICOS = 'ceramicos', 'Cerámicos'
         COMPUESTOS = 'compuestos', 'Compuestos'
 
-    nombre = models.CharField(max_length=100, unique=True)
+    nombre = models.CharField(
+        max_length=100, 
+        unique=True,
+        help_text=(
+            "El identificador único del material, usado internamente para "
+            "enlazar con los archivos de datos CSV. Por convención, debe "
+            "usar guiones bajos en lugar de espacios (ej. 'AISI_1020_Steel')."
+        )
+    )
+    
     categoria = models.CharField(
         max_length=20,
         choices=Categoria.choices,
-        default=Categoria.METALES
+        default=Categoria.METALES,
+        help_text=(
+            "Clasificación o familia a la que pertenece el material. Este campo "
+            "determina qué modelo de simulación se utilizará y cómo se "
+            "agrupará el material en la interfaz de usuario."
+        )
     )
 
     @property
     def nombre_display(self):
-        """Devuelve el nombre del material en un formato legible para el usuario.
+        """
+        Propiedad calculada que devuelve el nombre del material en un formato
+        limpio y legible para ser mostrado en la interfaz de usuario (UI).
+        
+        Este método no se almacena en la base de datos, sino que se calcula
+        en tiempo real cada vez que se accede a él.
+        
+        Example:
+            Si `self.nombre` es "AISI_1020_Steel", `self.nombre_display`
+            devolverá "AISI 1020 Steel".
 
         Returns:
-            str: El nombre del material con guiones bajos reemplazados por espacios.
+            str: El nombre del material con los guiones bajos reemplazados por espacios.
         """
         return self.nombre.replace('_', ' ')
 
     def __str__(self):
-        """Representación en cadena del modelo, utilizada en el admin de Django."""
+        """
+        Devuelve la representación en cadena de texto del objeto.
+
+        Este método es utilizado por Django en muchas partes, especialmente
+        en el panel de administración, para mostrar una representación
+        legible de cada instancia del modelo.
+        
+        Returns:
+            str: El nombre legible del material (utiliza `nombre_display`).
+        """
         return self.nombre_display
 
 class Ensayo(models.Model):

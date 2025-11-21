@@ -77,38 +77,21 @@ almacenar parámetros específicos de cada tipo de ensayo.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="corelab.models.Material">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">corelab.models.</span></span><span class="sig-name descname"><span class="pre">Material</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Material" title="Link to this definition">¶</a></dt>
-<dd><p>Representa un material único en la base de datos.</p>
-<p>Este modelo almacena las propiedades identificativas de cada material que puede ser
-utilizado en las simulaciones.</p>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="corelab.models.Material.nombre">
-<span class="sig-name descname"><span class="pre">nombre</span></span><a class="headerlink" href="#corelab.models.Material.nombre" title="Link to this definition">¶</a></dt>
-<dd><p>El identificador único del material. Por convención, debe
-usar guiones bajos en lugar de espacios para mantener la
-consistencia con los nombres de archivo.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>CharField</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py attribute">
-<dt class="sig sig-object py" id="corelab.models.Material.categoria">
-<span class="sig-name descname"><span class="pre">categoria</span></span><a class="headerlink" href="#corelab.models.Material.categoria" title="Link to this definition">¶</a></dt>
-<dd><p>La clasificación del material (ej. ‘metales’, ‘polimericos’),
-definida por las opciones en la clase interna Categoria.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>CharField</p>
-</dd>
-</dl>
-</dd></dl>
-
+<dd><p>Representa un material único y sus propiedades intrínsecas en la base de datos.</p>
+<p>Este modelo es la entidad central del proyecto. Almacena la información
+identificativa clave de cada material que puede ser seleccionado y utilizado
+en las simulaciones de ensayos mecánicos.</p>
+<p>Cada instancia de este modelo corresponde a una entrada única en el catálogo de
+materiales del simulador.</p>
 <dl class="py class">
 <dt class="sig sig-object py" id="corelab.models.Material.Categoria">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">Categoria</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/corelab/models.html#Material.Categoria"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#corelab.models.Material.Categoria" title="Link to this definition">¶</a></dt>
-<dd><p>Define las categorías de materiales permitidas en la base de datos.</p>
+<dd><p>Define las categorías de materiales permitidas como una enumeración fija.</p>
+<p>El uso de <cite>models.TextChoices</cite> es una buena práctica de Django que
+garantiza la integridad de los datos, ya que el campo ‘categoria’
+solo puede aceptar uno de estos valores.</p>
+<p>Cada miembro de la enumeración es una tupla:
+(valor_almacenado_en_db, etiqueta_legible_para_humanos)</p>
 </dd></dl>
 
 <dl class="py exception">
@@ -124,10 +107,16 @@ definida por las opciones en la clase interna Categoria.</p>
 <dl class="py property">
 <dt class="sig sig-object py" id="corelab.models.Material.nombre_display">
 <em class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">nombre_display</span></span><a class="headerlink" href="#corelab.models.Material.nombre_display" title="Link to this definition">¶</a></dt>
-<dd><p>Devuelve el nombre del material en un formato legible para el usuario.</p>
+<dd><p>Propiedad calculada que devuelve el nombre del material en un formato
+limpio y legible para ser mostrado en la interfaz de usuario (UI).</p>
+<p>Este método no se almacena en la base de datos, sino que se calcula
+en tiempo real cada vez que se accede a él.</p>
+<p class="rubric">Example</p>
+<p>Si <cite>self.nombre</cite> es “AISI_1020_Steel”, <cite>self.nombre_display</cite>
+devolverá “AISI 1020 Steel”.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>El nombre del material con guiones bajos reemplazados por espacios.</p>
+<dd class="field-odd"><p>El nombre del material con los guiones bajos reemplazados por espacios.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>str</p>
