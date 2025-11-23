@@ -1,0 +1,11 @@
+# MANIFEST.in
+# Incluye el archivo de la licencia
+include LICENSE
+# Incluye el README
+include README.md
+
+# ¡LA PARTE MÁS IMPORTANTE!
+# Incluye recursivamente todos los archivos dentro de estas carpetas de 'corelab'
+recursive-include src/corelab/templates *
+recursive-include src/corelab/static *
+recursive-include src/corelab/migrations *

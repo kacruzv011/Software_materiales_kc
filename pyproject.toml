@@ -1,0 +1,52 @@
+# ====================================================================
+#  pyproject.toml - Manifiesto Final del Paquete para PyPI
+# ====================================================================
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "psutm-simulator-kacruzv011"
+version = "4.0.3"
+description = "Una librería Python y aplicación Django para la simulación interactiva de ensayos mecánicos de materiales."
+readme = "README.md"
+requires-python = ">=3.8"
+
+authors = [
+  { name="Kevin Cruz", email="kacruzv@udistrital.edu.co" },
+  { name="Carlos Vasco", email="email-profesor@example.com" },
+]
+
+# --- LICENCIA (Formato Moderno) ---
+# Usamos el identificador SPDX para GPLv3 para evitar advertencias.
+license = { text = "GPL-3.0-or-later" }
+
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Framework :: Django",
+    "Intended Audience :: Education",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+]
+
+dependencies = [
+    "Django>=4.0",
+    "numpy",
+    "pandas",
+    "PyMuPDF",
+    "matplotlib",
+]
+
+[project.urls]
+Homepage = "https://github.com/kacruzv011/Software_materiales_kc"
+Documentation = "https://kacruzv011.github.io/Software_materiales_kc/"
+"Source Code" = "https://github.com/kacruzv011/Software_materiales_kc"
+
+[tool.setuptools]
+include-package-data = true
+
+[tool.setuptools.packages.find]
+where = ["src"]
