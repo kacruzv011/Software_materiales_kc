@@ -1,13 +1,18 @@
-# 🧪 Software de Simulación de Materiales
+# ⚙️ Pedagogical Simulator of a Universal Testing Machine (PSUTM)
 
-Este proyecto es un **software web desarrollado en Django** que permite realizar **simulaciones mecánicas de materiales** a partir de datos almacenados en una base de datos.  
-El usuario puede **seleccionar un material y el tipo de simulación** que desea ejecutar; el sistema genera las **gráficas y resultados** con base en los datos registrados.
+[![PyPI Version](https://badge.fury.io/py/psutm-simulator-kacruzv011.svg)](https://pypi.org/project/psutm-simulator-kacruzv011/)
+[![Documentation](https://img.shields.io/badge/docs-leerm%C3%A1s-brightgreen)](https://kacruzv011.github.io/Software_materiales_kc/)
+[![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
 
-> 🚧 **Estado actual:** Versión inicial funcional (v0.1).  
-> En esta versión se implementa la estructura base del proyecto Django, con una app principal (`core_lab`) encargada de gestionar materiales y simulaciones.  
-> Próximamente se integrarán modelos físicos, módulos de cálculo numérico y generación de reportes automáticos.
+Un simulador web educativo, desarrollado en Django, para la caracterización mecánica de materiales mediante ensayos virtuales de tensión, compresión y torsión.
+
+**Autores:** Kevin Cruz, Alexei.
+Un proyecto de la **Universidad Distrital Francisco José de Caldas**.
+
+![Screenshot de la Simulación](url_a_tu_screenshot.png) <!-- Reemplaza esto con una URL a una imagen de tu simulador. Puedes subirla a la pestaña "Issues" de GitHub y copiar el enlace. -->
 
 ---
+
 
 ## 🧰 Tecnologías utilizadas
 
@@ -21,112 +26,100 @@ El usuario puede **seleccionar un material y el tipo de simulación** que desea 
 | **HTML / CSS (Django templates)** | Renderizado de interfaz web básica. |
 | **JupyterLab (opcional)** | Entorno auxiliar para pruebas de simulación. |
 
+
+Este proyecto tiene dos formas de uso: como una **aplicación web completa** que puedes ejecutar localmente, o como una **librería de Python** que puedes usar en tus propios proyectos.
+
+## 1. Para Usuarios Finales: Ejecutar la Interfaz Web Completa 🚀
+
+Esta es la opción si quieres usar el simulador interactivo tal y como fue diseñado.
+
+### Requisitos Previos
+
+- Python 3.8 o superior
+- Git
+
+### Guía de Instalación y Ejecución
+
+Sigue estos pasos en tu terminal para tener el simulador funcionando en tu máquina en menos de 5 minutos.
+
+1.  **Clona el repositorio:**
+    ```bash
+    git clone https://github.com/kacruzv011/Software_materiales_kc.git
+    cd Software_materiales_kc
+    ```
+
+2.  **(Recomendado) Crea y activa un entorno virtual:**
+    ```bash
+    python3 -m venv venv
+    source venv/bin/activate  # En Linux/macOS
+    # venv\Scripts\activate    # En Windows
+    ```
+
+3.  **Instala todas las dependencias necesarias:**
+    Este proyecto utiliza dos archivos de requisitos. `requirements-dev.txt` incluye todo lo necesario para correr la aplicación y también las herramientas de desarrollo como `matplotlib` para generar nuevos materiales.
+    ```bash
+    pip install -r requirements-dev.txt
+    ```
+
+4.  **Configura la base de datos:**
+    Este comando creará el archivo de base de datos local y todas las tablas necesarias.
+    ```bash
+    python manage.py migrate
+    ```
+
+5.  **Genera los materiales iniciales:**
+    El simulador necesita los archivos de datos CSV para funcionar. Este comando los creará automáticamente a partir de los PDFs de ejemplo incluidos.
+    ```bash
+    python manage.py generar_materiales
+    ```
+
+6.  **¡Inicia el servidor!**
+    ```bash
+    python manage.py runserver
+    ```
+
+¡Listo! Abre tu navegador web y visita **http://127.0.0.1:8000/** para acceder al simulador.
+
 ---
 
-## 🏗️ Estructura del proyecto
+## 2. Para Desarrolladores: Usar la Librería (`corelab`) en un Proyecto Externo 📦
 
-Software_Materiales/
-│── manage.py
-│── db.sqlite3
-│── README.md
-│
-├── core_lab/ # App principal
-│ ├── migrations/ # Migraciones de la base de datos
-│ ├── static/ # Archivos estáticos (CSS, JS, imágenes)
-│ ├── templates/ # Vistas HTML renderizadas
-│ │ └── core_lab/
-│ │ ├── index.html # Página principal
-│ │ ├── material_list.html
-│ │ └── simulation_result.html
-│ ├── admin.py # Configuración del panel administrativo
-│ ├── apps.py # Registro de la app en Django
-│ ├── models.py # Modelos de Material y Simulación
-│ ├── views.py # Lógica de vistas
-│ ├── urls.py # Enrutamiento interno de la app
-│ └── tests.py # Pruebas unitarias
-│
-├── Software_Materiales/ # Configuración global del proyecto
-│ ├── settings.py # Configuración principal
-│ ├── urls.py # Enrutamiento global
-│ ├── asgi.py / wsgi.py # Configuración para despliegue
-│ └── init.py
-│
-└── venv/ (opcional) # Entorno virtual
+Si solo te interesa el "motor" de simulación (la lógica para leer PDFs, generar curvas, y los modelos de Django) para integrarlo en tu propio código, puedes instalar la librería directamente desde PyPI.
 
+### Instalación desde PyPI
 
----
+```bash
+pip install psutm-simulator-kacruzv011
+```
+Ejemplo de Uso como Librería
 
-## ⚙️ Modelos principales
+Una vez instalado, puedes importar las funciones principales en tu propio código Python.
 
-### `Material`
-Representa las propiedades básicas de cada material registrado.
+from corelab.simulations import get_properties_from_pdf, simular_metal
+from corelab.models import Material
 
-python
-class Material(models.Model):
-    nombre = models.CharField(max_length=100)
-    densidad = models.FloatField()
-    elasticidad = models.FloatField()
-    resistencia_traccion = models.FloatField()
+# Extraer propiedades de un PDF local
+nombre, props, mtype = get_properties_from_pdf("ruta/a/mi_ficha.pdf")
 
-    def __str__(self):
-        return self.nombre
-Simulacion
-
-Asocia un material con un tipo de prueba mecánica (por ejemplo: tracción, compresión, dureza).
-
-
-class Simulacion(models.Model):
-    material = models.ForeignKey(Material, on_delete=models.CASCADE)
-    tipo = models.CharField(max_length=100)
-    fecha = models.DateTimeField(auto_now_add=True)
-    resultado = models.JSONField(default=dict)
-
+if props:
+    # Generar curvas de simulación
+    curvas_sinteticas = simular_metal(**props)
     
-🧮 Flujo de funcionamiento
-
-Inicio del servidor Django
-Se ejecuta el servidor local y se accede a la interfaz web.
-
-Selección del material y tipo de simulación
-El usuario elige entre los materiales registrados y el tipo de prueba a realizar.
-
-Ejecución de la simulación
-(En esta versión inicial se generan datos base o simulados).
-En versiones futuras, se conectará a módulos de cálculo físico o de elementos finitos.
-
-Visualización de resultados
-Se generan y muestran gráficas interactivas de tensión-deformación u otras curvas relevantes.
-
-Almacenamiento y descarga de resultados
-Los resultados se guardan en la base de datos y podrán exportarse a PDF o CSV.
-
-🚀 Cómo ejecutar el proyecto
-1️⃣ Clonar el repositorio
-
-git clone https://github.com/tuusuario/Software_Materiales.git
-cd Software_Materiales
+    # También puedes interactuar con los modelos de Django en tu propio proyecto,
+    # siempre que tengas 'corelab' en tus INSTALLED_APPS.
+    nuevo_material = Material.objects.create(nombre=nombre, categoria=mtype)
 
 
-2️⃣ Crear entorno virtual
+Para más detalles sobre la API y las funciones disponibles, consulta la Documentación Oficial Completa.
 
-python -m venv venv
-source venv/bin/activate   # En Linux / macOS
-venv\Scripts\activate      # En Windows
+## ⚖️ Licencia y Descargo de Responsabilidad
 
+Este proyecto se distribuye bajo los términos de la **Licencia Pública General de GNU v3 (GPLv3)**. Para más detalles, consulta el archivo `LICENSE`.
 
-3️⃣ Instalar dependencias
+### Disclaimer
 
-pip install -r requirements.txt
+1.  **Naturaleza de los Datos:** Este es un simulador con fines **estrictamente educativos**. Los datos de las curvas de ensayo son **sintéticos** y generados por modelos matemáticos. **NO deben ser utilizados para diseño de ingeniería en el mundo real.**
 
-4️⃣ Aplicar migraciones
+2.  **Fuente de las Propiedades:** Las propiedades de entrada para los modelos han sido extraídas de las fichas técnicas públicas de [MatWeb.com](https://www.matweb.com). Agradecemos a MatWeb por este invaluable recurso. Este proyecto no está afiliado ni respaldado por MatWeb 
 
-python manage.py makemigrations
-python manage.py migrate
-
-5️⃣Ejecutar el servidor local
-
-python manage.py runserver
-
-Luego, abre tu navegador en:
-👉 http://127.0.0.1:8000/
 

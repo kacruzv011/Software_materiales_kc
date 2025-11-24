@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="es">
+{% load static %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>PSUTM Simulator</title>
+    <link rel="stylesheet" href="{% static 'core_lab/css/style.css' %}">
+    <script src="{% static 'core_lab/js/app.js' %}" defer></script>
+</head>
+<body>
+    <header>
+        <h1>⚙️ PSUTM Simulator</h1>
+        <nav>
+            <a href="#">Inicio</a>
+            <a href="#">Materiales</a>
+            <a href="#">Simulaciones</a>
+            <a href="#">Gráficas</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="intro">
+            <h2>Simulación interactiva de materiales y ensayos</h2>
+            <p>Explora materiales, visualiza sus propiedades y ejecuta simulaciones de laboratorio virtual.</p>
+        </section>
+
+        <section id="materiales">
+            <h3>🧱 Materiales disponibles</h3>
+            <ul>
+                {% for mat in materiales %}
+                <li>
+                    <strong>{{ mat.nombre }}</strong> — {{ mat.descripcion }}
+                    <br>Densidad: {{ mat.densidad }} | Dureza: {{ mat.dureza }}
+                </li>
+                {% empty %}
+                <li>No hay materiales cargados aún.</li>
+                {% endfor %}
+            </ul>
+        </section>
+    </main>
+
+    <footer>
+        <p>Desarrollado como apoyo pedagógico — CoreLab © 2025</p>
+    </footer>
+</body>
+</html>

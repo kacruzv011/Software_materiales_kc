@@ -1,6 +1,8 @@
-Django>=5.0
+Django
+gunicorn
+whitenoise
 psycopg2-binary
-plotly
-matplotlib
+dj-database-url
+djangorestframework
+numpy # Necesario para la API, pero quitamos las dependencias más pesadas
 pandas
-reportlab

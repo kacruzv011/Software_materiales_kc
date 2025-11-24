@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}CoreLab - Catálogo Interactivo de Materiales{% endblock %}
+
+{% block content %}
+<div class="materiales-container">
+    <h1>Explora las Familias de Materiales</h1>
+    <p style="color: var(--text-light); max-width: 600px; margin: 0 auto;">Selecciona una categoría para aprender sobre sus propiedades físicas y ver los materiales disponibles para la simulación.</p>
+    
+    <div class="category-selector">
+        <label for="categoria-select">Selecciona una Categoría:</label>
+        <select id="categoria-select">
+            <option value="" disabled selected>-- Elige una familia de materiales --</option>
+            {% for categoria_info in datos_categorias %}
+            <option value="{{ categoria_info.valor }}">{{ categoria_info.nombre }}</option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Contenedores para Cada Categoría, creados por Django -->
+    {% for categoria_info in datos_categorias %}
+    <div id="seccion-{{ categoria_info.valor }}" class="seccion-categoria">
+        
+        <h2><span class="icon">🔬</span> Propiedades de los {{ categoria_info.nombre }}</h2>
+        <p><em>{{ categoria_info.descripcion.tagline }}</em></p>
+        
+        <div style="margin-top: 1.5rem;">
+            <h4>Principios Físicos Fundamentales</h4>
+            <ul>
+                {% for prop in categoria_info.descripcion.properties %}
+                    <li>{{ prop|safe }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        {% if categoria_info.materiales %}
+        <div class="material-select-wrapper">
+            <label for="material-select-{{ categoria_info.valor }}">Materiales Disponibles en el Simulador:</label>
+            <select id="material-select-{{ categoria_info.valor }}">
+                <option value="" disabled selected>-- Ver materiales de esta familia --</option>
+                {% for material in categoria_info.materiales %}
+                <option value="{{ material.nombre }}">{{ material.nombre_display }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        {% else %}
+        <p style="color: var(--muted); margin-top: 2rem;">No hay materiales de este tipo registrados en la base de datos.</p>
+        {% endif %}
+
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+  {# --- ¡ESTA ES LA LÍNEA CORREGIDA! --- #}
+  {# Le añadimos el prefijo 'corelab/' a la ruta para que coincida #}
+  {# con la ubicación real del archivo. #}
+  <script src="{% static 'corelab/js/materiales.js' %}"></script>
+{% endblock %}

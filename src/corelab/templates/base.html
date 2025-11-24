@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <title>{% block title %}PSUTM Simulator{% endblock %}</title>
+    <link rel="icon" type="image/png" href="{% static 'corelab/images/favicon.png' %}">
+    <!-- ==========================================================
+         ¡ESTA ES LA LÍNEA CORREGIDA!
+         Le añadimos el prefijo 'corelab/' a la ruta para que Django
+         sepa que debe buscar este archivo dentro de la app 'corelab'.
+         ========================================================== -->
+    <link rel="stylesheet" href="{% static 'corelab/css/style.css' %}">
+    
+    {% block extra_css %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header class="main-header">
+        <a href="{% url 'home' %}" class="brand">PSTM</a>
+        <nav>
+            <a href="{% url 'home' %}">Inicio</a>
+            <a href="{% url 'materiales' %}">Materiales</a>
+            <a href="{% url 'simulacion' %}">Simulación</a>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer>
+        <p><strong>© 2025 Kevin Cruz & Carlos Vasco</strong> | Un proyecto de la Universidad Distrital</p>
+        <p>Distribuido bajo los términos de la Licencia Pública General de GNU v3 (GPLv3).</p>
+        <p style="font-size: 0.8rem; color: #888; margin-top: 10px;">
+            <strong>Disclaimer:</strong> Este es un simulador educativo con datos sintéticos.
+        </p>
+    </footer>
+    
+    {% block scripts %}{% endblock %}
+</body>
+</html>
